@@ -3,8 +3,8 @@ package main
 import (
 	// pacote para conexao com bando dedaos.
 
-	"loja-vendas/loja-vendas/database"
-	"loja-vendas/loja-vendas/rotas"
+	"loja-vendas/database"
+	"loja-vendas/rotas"
 
 	// modelo inicialmente criado para clientes.
 

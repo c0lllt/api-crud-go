@@ -3,7 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"fmt"
-	"loja-vendas/loja-vendas/database"
+	"loja-vendas/database"
 	"loja-vendas/models"
 	"net/http"
 

@@ -1,0 +1,1 @@
+CRUD feito em Golang usando alguns frameworks conhecidos como gin-gonic, inicialmente par atender as requisições do front, e comunicação com banco de dados. até o momento apenas cadastrando clientes.

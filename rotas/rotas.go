@@ -1,7 +1,7 @@
 package rotas
 
 import (
-	"loja-vendas/loja-vendas/controllers"
+	"loja-vendas/controllers"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
