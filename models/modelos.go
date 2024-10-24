@@ -8,8 +8,8 @@ type Cliente struct {
 }
 
 type Produtos struct {
-	ID      int    `json:"id"`
-	Nome    string `json:"nome"`
-	Preco   int16  `json:"preco"`
-	Estoque int    `json:"estoque"`
+	ID         int
+	Nome       string  `json:"nome"`
+	Valor      float64 `json:"valor"`
+	Quantidade int     `json:"quantidade"`
 }
