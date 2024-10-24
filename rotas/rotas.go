@@ -29,6 +29,12 @@ func ConfigurarRotas() *gin.Engine {
 	//rota de login
 	router.POST("/login", controllers.LogarUsuario)
 
+	// rota para CRUD de Produtos
+	router.POST("/produtos", controllers.CriarProduto)
+	router.GET("/produtos")
+	router.PUT("/produtos")
+	router.DELETE("/produtos")
+
 	return router
 
 }
