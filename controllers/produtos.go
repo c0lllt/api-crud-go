@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"loja-vendas/database"
 	"loja-vendas/models"
 	"net/http"
@@ -43,4 +44,49 @@ func CriarProduto(c *gin.Context) {
 	// retornar dados do cliente criado
 	novoProduto.ID = int(id)
 	c.JSON(http.StatusOK, gin.H{"message": "Produto adicionado com sucesso!", "Produto": novoProduto})
+}
+
+// Func para listrar Produto(s)
+
+func BuscarProduto(c *gin.Context) {
+	id := c.Param("id")
+
+	var buscar string
+	var rows *sql.Rows
+	var err error
+
+	//Buscar Produto Especifico
+	if id != "" {
+		buscar = "SELECT id, nome FROM produto WHERE id = ? "
+		rows, err = database.BancodeDados.Query(buscar, id)
+		// Buscar todos
+	} else {
+		buscar = "SELECT id, nome, valor, quantidade FROM produto"
+		rows, err = database.BancodeDados.Query(buscar)
+	}
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao buscar produto"})
+		return
+	}
+
+	defer rows.Close()
+
+	var produtos []models.Produtos
+	for rows.Next() {
+		var produto models.Produtos
+		if err := rows.Scan(&produto.ID, &produto.Nome, &produto.Valor, &produto.Quantidade); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao ler dados do produto"})
+			return
+		}
+		produtos = append(produtos, produto)
+	}
+
+	if len(produtos) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Nenhum produto encontrado"})
+		return
+	}
+
+	c.JSON(http.StatusOK, produtos)
+
 }
