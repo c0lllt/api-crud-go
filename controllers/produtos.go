@@ -1,6 +1,7 @@
 package controllers
 
 import (
+
 	"database/sql"
 	"loja-vendas/database"
 	"loja-vendas/models"
@@ -46,6 +47,7 @@ func CriarProduto(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Produto adicionado com sucesso!", "Produto": novoProduto})
 }
 
+
 // Func para listrar Produto(s)
 
 func BuscarProduto(c *gin.Context) {
@@ -90,3 +92,4 @@ func BuscarProduto(c *gin.Context) {
 	c.JSON(http.StatusOK, produtos)
 
 }
+
