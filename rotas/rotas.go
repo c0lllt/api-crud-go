@@ -34,7 +34,7 @@ func ConfigurarRotas() *gin.Engine {
 	router.GET("/produtos", controllers.BuscarProduto)
 	router.GET("/produtos/:nome", controllers.BuscarProduto)
 	router.PUT("/produtos/:id", controllers.AtualizarProduto)
-	router.DELETE("/produtos")
+	router.DELETE("/produtos/:id", controllers.DeletarProduto)
 
 	return router
 

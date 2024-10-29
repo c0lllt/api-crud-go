@@ -127,3 +127,24 @@ func AtualizarProduto(c *gin.Context) {
 	//Json mostrando que deu certo.
 	c.JSON(http.StatusOK, gin.H{"Tudo certo": "Produto atualizado com sucesso!"})
 }
+
+func DeletarProduto(c *gin.Context) {
+	id := c.Param("id")
+
+	deleteQuery := "DELETE FROM produto WHERE id = ?"
+	resultado, err := database.BancodeDados.Exec(deleteQuery, id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Erro ao tentar deletar produto.", "Motivo": err.Error()})
+		return
+	}
+	//Verifica se foi deletado
+	rowsAffected, err := resultado.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"erro": "Produto nao encontrado ou ja deletado."})
+		return
+	}
+
+	//json caso deu tudo certo
+	c.JSON(http.StatusOK, gin.H{"message": "Produto deletado com sucesso!"})
+
+}
