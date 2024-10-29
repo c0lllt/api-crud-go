@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"database/sql"
+	"fmt"
 	"loja-vendas/database"
 	"loja-vendas/models"
 	"net/http"
@@ -49,16 +50,16 @@ func CriarProduto(c *gin.Context) {
 // Func para listrar Produto(s)
 
 func BuscarProduto(c *gin.Context) {
-	id := c.Param("id")
+	nome := c.Param("nome")
 
 	var buscar string
 	var rows *sql.Rows
 	var err error
 
 	//Buscar Produto Especifico
-	if id != "" {
-		buscar = "SELECT id, nome FROM produto WHERE id = ? "
-		rows, err = database.BancodeDados.Query(buscar, id)
+	if nome != "" {
+		buscar = "SELECT id, nome, valor, quantidade FROM produto WHERE nome =? "
+		rows, err = database.BancodeDados.Query(buscar, nome)
 		// Buscar todos
 	} else {
 		buscar = "SELECT id, nome, valor, quantidade FROM produto"
@@ -66,6 +67,7 @@ func BuscarProduto(c *gin.Context) {
 	}
 
 	if err != nil {
+		fmt.Printf("\n E erro: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao buscar produto"})
 		return
 	}
@@ -76,6 +78,7 @@ func BuscarProduto(c *gin.Context) {
 	for rows.Next() {
 		var produto models.Produtos
 		if err := rows.Scan(&produto.ID, &produto.Nome, &produto.Valor, &produto.Quantidade); err != nil {
+			fmt.Printf("\n Erro: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao ler dados do produto"})
 			return
 		}
@@ -89,4 +92,38 @@ func BuscarProduto(c *gin.Context) {
 
 	c.JSON(http.StatusOK, produtos)
 
+}
+
+func AtualizarProduto(c *gin.Context) {
+	id := c.Param("id")
+
+	var atualizarProd models.Produtos
+	if err := c.ShouldBindBodyWithJSON(&atualizarProd); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Problema ao Bindar JSON", "detalhes": err.Error()})
+		return
+	}
+
+	//Validar os campos obrigatorios
+	if atualizarProd.Nome == "" || atualizarProd.Valor == 0 || atualizarProd.Quantidade == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Nome, Valor e Quantidade são obrigatorios"})
+		return
+	}
+
+	//Atualizar produto no banco
+	updateQuery := "UPDATE produto SET nome = ?, valor = ?, quantidade = ? WHERE id = ?"
+	resultado, err := database.BancodeDados.Exec(updateQuery, atualizarProd.Nome, atualizarProd.Valor, atualizarProd.Quantidade, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao tentar atualizar o produto."})
+		return
+	}
+
+	//Verificar se o produto foi atualizado
+	rowsAffected, err := resultado.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"erro": "produto nao encontrado"})
+		return
+	}
+
+	//Json mostrando que deu certo.
+	c.JSON(http.StatusOK, gin.H{"Tudo certo": "Produto atualizado com sucesso!"})
 }
