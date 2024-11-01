@@ -14,7 +14,7 @@ func Conectar() {
 
 	// Conexão com banco de dados ...
 	var err error
-	BancodeDados, err = sql.Open("mysql", "root@tcp(127.0.0.1:3306)/loja_vendas") //Este comando abre uma conexão com o banco de dados MySQL.
+	BancodeDados, err = sql.Open("mysql", "root@tcp(127.0.0.1:3306)/loja_vendas") // Abre conexao com banco
 	if err != nil {
 		log.Fatal(err)
 	}
