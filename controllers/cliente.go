@@ -18,6 +18,7 @@ func CriarCliente(c *gin.Context) {
 
 	// Validação do JSON recebido
 	if err := c.ShouldBindJSON(&novoCliente); err != nil {
+		fmt.Printf("\n E erro: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "JSON inválido", "detalhes": err.Error()})
 		return
 	}
