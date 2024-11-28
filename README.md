@@ -15,20 +15,7 @@ A estrutura do projeto foi organizada para facilitar a manutenção, escalabilid
 
 ## 📁 Estrutura do Projeto
 A estrutura do projeto é a seguinte:
-API-CRUD-GO/
-├── controllers/
-│   ├── cliente.go         # Controlador para operações de clientes
-│   ├── produtos.go        # Controlador para operações de produtos
-├── database/
-│   ├── connectionBanco.go # Configuração e conexão com o banco de dados
-├── modelos/
-│   ├── modelos.go         # Definições de modelos (Clientes, Produtos)
-├── rotas/
-│   ├── rotas.go           # Definição de rotas da API
-├── go.mod                 # Arquivo de dependências do Go
-├── go.sum                 # Resumo das dependências
-├── main.go                # Arquivo principal da aplicação
-├── README.md              # Documentação do projeto
+API-CRUD-GO/ ├── controllers/ │ ├── cliente.go # Controlador para operações de clientes │ ├── produtos.go # Controlador para operações de produtos ├── database/ │ ├── connectionBanco.go # Configuração e conexão com o banco de dados ├── modelos/ │ ├── modelos.go # Definições de modelos (Clientes, Produtos) ├── rotas/ │ ├── rotas.go # Definição de rotas da API ├── go.mod # Arquivo de dependências do Go ├── go.sum # Resumo das dependências ├── main.go # Arquivo principal da aplicação ├── README.md # Documentação do projeto
 
 ## 🚀 Endpoints da API
 Abaixo estão os principais endpoints disponíveis:
