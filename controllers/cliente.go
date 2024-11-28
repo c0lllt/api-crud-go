@@ -18,6 +18,7 @@ func CriarCliente(c *gin.Context) {
 
 	// Validação do JSON recebido
 	if err := c.ShouldBindJSON(&novoCliente); err != nil {
+		fmt.Printf("\n E erro: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "JSON inválido", "detalhes": err.Error()})
 		return
 	}
@@ -163,8 +164,8 @@ func LogarUsuario(c *gin.Context) {
 
 	fmt.Println("Dados recebidos:", loginData)
 
-	var clientes models.Cliente // Substitua pelo seu modelo de usuário
-	err := database.BancodeDados.QueryRow("SELECT * FROM clientes WHERE nome = ? AND senha = ?", loginData.Nome, loginData.Senha).Scan(&clientes)
+	var clientes models.Cliente
+	err := database.BancodeDados.QueryRow("SELECT id_cliente, nome, senha FROM clientes WHERE nome = ? AND senha = ?", loginData.Nome, loginData.Senha).Scan(&clientes.ID, &clientes.Nome, &clientes.Senha)
 	if err != nil {
 		fmt.Printf("\n E erro: %v", err)
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Credenciais inválidas"})

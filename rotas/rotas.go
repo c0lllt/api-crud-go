@@ -31,7 +31,8 @@ func ConfigurarRotas() *gin.Engine {
 
 	// rota para CRUD de Produtos
 	router.POST("/produtos", controllers.CriarProduto)
-	router.GET("/produtos", controllers.BuscarProduto)
+	router.GET("/produtos", controllers.BuscarProduto) //rota para envio das pizzas para o front
+
 	router.GET("/produtos/:nome", controllers.BuscarProduto)
 	router.PUT("/produtos/:id", controllers.AtualizarProduto)
 	router.DELETE("/produtos/:id", controllers.DeletarProduto)

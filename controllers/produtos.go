@@ -20,15 +20,15 @@ func CriarProduto(c *gin.Context) {
 	}
 
 	//validar campos para certificar que nao estejam vazios
-	if novoProduto.Nome == "" || novoProduto.Valor == 0 || novoProduto.Quantidade == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"erro": "Nome, valor e quantidade são necessarios"})
+	if novoProduto.Nome == "" || novoProduto.Descricao == "" || novoProduto.Valor == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Nome, descrição e valor  são necessarios"})
 		return
 	}
 
 	//inserir no banco de dados
 
-	insertQuery := "INSERT INTO produto(nome,valor,quantidade) VALUES (?,?,?)"
-	resultado, err := database.BancodeDados.Exec(insertQuery, novoProduto.Nome, novoProduto.Valor, novoProduto.Quantidade)
+	insertQuery := "INSERT INTO produto(nome, descricao,valor) VALUES (?,?,?)"
+	resultado, err := database.BancodeDados.Exec(insertQuery, novoProduto.Nome, novoProduto.Descricao, novoProduto.Valor)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao inserir no banco"})
 		return
@@ -58,11 +58,11 @@ func BuscarProduto(c *gin.Context) {
 
 	//Buscar Produto Especifico
 	if nome != "" {
-		buscar = "SELECT id, nome, valor, quantidade FROM produto WHERE nome =? "
+		buscar = "SELECT id, nome, descricao, valor FROM produto WHERE nome =? "
 		rows, err = database.BancodeDados.Query(buscar, nome)
 		// Buscar todos
 	} else {
-		buscar = "SELECT id, nome, valor, quantidade FROM produto"
+		buscar = "SELECT id, nome, descricao, valor FROM produto"
 		rows, err = database.BancodeDados.Query(buscar)
 	}
 
@@ -77,7 +77,7 @@ func BuscarProduto(c *gin.Context) {
 	var produtos []models.Produtos
 	for rows.Next() {
 		var produto models.Produtos
-		if err := rows.Scan(&produto.ID, &produto.Nome, &produto.Valor, &produto.Quantidade); err != nil {
+		if err := rows.Scan(&produto.ID, &produto.Nome, &produto.Descricao, &produto.Valor); err != nil {
 			fmt.Printf("\n Erro: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao ler dados do produto"})
 			return
@@ -104,14 +104,14 @@ func AtualizarProduto(c *gin.Context) {
 	}
 
 	//Validar os campos obrigatorios
-	if atualizarProd.Nome == "" || atualizarProd.Valor == 0 || atualizarProd.Quantidade == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"erro": "Nome, Valor e Quantidade são obrigatorios"})
+	if atualizarProd.Nome == "" || atualizarProd.Descricao == "" || atualizarProd.Valor == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Nome, Descrição e Valores são obrigatorios"})
 		return
 	}
 
 	//Atualizar produto no banco
-	updateQuery := "UPDATE produto SET nome = ?, valor = ?, quantidade = ? WHERE id = ?"
-	resultado, err := database.BancodeDados.Exec(updateQuery, atualizarProd.Nome, atualizarProd.Valor, atualizarProd.Quantidade, id)
+	updateQuery := "UPDATE produto SET nome = ?, descricao = ?, valor = ? WHERE id = ?"
+	resultado, err := database.BancodeDados.Exec(updateQuery, atualizarProd.Nome, atualizarProd.Descricao, atualizarProd.Valor, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao tentar atualizar o produto."})
 		return
